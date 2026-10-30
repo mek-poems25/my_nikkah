@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#123b70">
+  <meta name="description" content="Private offline Nikah contributions tracker">
+  <title>ELIAS NIKAH CONTRIBUTIONS MANAGER</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-mark">EN</div>
+    <div class="brand-copy">
+      <div class="eyebrow">PRIVATE CONTRIBUTIONS RECORD</div>
+      <h1>ELIAS NIKAH CONTRIBUTIONS MANAGER</h1>
+      <p>Organised pledges • payments • gifts</p>
+    </div>
+    <button class="icon-button" id="installBtn" hidden aria-label="Install app" title="Install app">↓</button>
+  </header>
+
+  <main class="shell">
+    <section class="welcome">
+      <div>
+        <p class="eyebrow gold-text">NIKAH CONTRIBUTIONS</p>
+        <h2>Assalaamu Alaikum</h2>
+        <p class="muted">Keep an accurate record of every pledge and contribution.</p>
+      </div>
+      <div class="date-chip" id="todayLabel"></div>
+    </section>
+
+    <section class="stats-grid" aria-label="Contribution summary">
+      <article class="stat-card">
+        <span class="stat-label">Total pledged</span>
+        <strong id="totalPledged">UGX 0</strong>
+        <span class="stat-foot">Cash commitments</span>
+      </article>
+      <article class="stat-card received">
+        <span class="stat-label">Cash received</span>
+        <strong id="totalReceived">UGX 0</strong>
+        <span class="stat-foot">Payments recorded</span>
+      </article>
+      <article class="stat-card outstanding">
+        <span class="stat-label">Outstanding</span>
+        <strong id="totalOutstanding">UGX 0</strong>
+        <span class="stat-foot">Unpaid cash pledges</span>
+      </article>
+      <article class="stat-card gifts">
+        <span class="stat-label">Other gifts</span>
+        <strong id="giftCount">0</strong>
+        <span class="stat-foot">Non-cash contributions</span>
+      </article>
+    </section>
+
+    <nav class="tabs" aria-label="Main navigation">
+      <button class="tab active" data-view="dashboard">Overview</button>
+      <button class="tab" data-view="contributors">People</button>
+      <button class="tab" data-view="pledges">Pledges</button>
+      <button class="tab" data-view="payments">Payments</button>
+      <button class="tab" data-view="gifts">Other gifts</button>
+      <button class="tab" data-view="records">Records</button>
+      <button class="tab" data-view="backup">Backup</button>
+    </nav>
+
+    <section class="view active" id="view-dashboard">
+      <div class="section-heading">
+        <div><p class="eyebrow">AT A GLANCE</p><h2>Contribution overview</h2></div>
+        <button class="primary small" data-go="pledges">＋ Add pledge</button>
+      </div>
+      <div class="panel">
+        <div class="panel-heading"><h3>Recent activity</h3><span class="muted small-text">Latest records first</span></div>
+        <div id="recentActivity" class="empty-state">No activity yet. Add your first contributor or pledge.</div>
+      </div>
+      <div class="note-card">
+        <strong>Record-keeping tip</strong>
+        <p>Record a pledge first, then add each payment against that pledge. For items such as rice, sugar or transport, use “Other gifts”.</p>
+      </div>
+    </section>
+
+    <section class="view" id="view-contributors">
+      <div class="section-heading"><div><p class="eyebrow">CONTACT REGISTER</p><h2>Contributors</h2></div></div>
+      <form id="contributorForm" class="panel form-grid">
+        <h3 class="full">Add a contributor</h3>
+        <label>Full name *<input name="name" required maxlength="90" placeholder="e.g. Lubega Mustafah"></label>
+        <label>Phone number<input name="phone" inputmode="tel" maxlength="25" placeholder="e.g. 07XXXXXXXX"></label>
+        <label class="full">Notes (optional)<textarea name="notes" rows="2" placeholder="Any useful note"></textarea></label>
+        <button class="primary full" type="submit">Save contributor</button>
+      </form>
+      <div class="panel">
+        <div class="panel-heading"><h3>People registered</h3><span id="peopleCount" class="muted small-text">0 people</span></div>
+        <input id="peopleSearch" class="search" placeholder="Search by name or phone…">
+        <div id="contributorsList" class="record-list empty-state">No contributors registered yet.</div>
+      </div>
+    </section>
+
+    <section class="view" id="view-pledges">
+      <div class="section-heading"><div><p class="eyebrow">CASH COMMITMENTS</p><h2>Record a pledge</h2></div></div>
+      <form id="pledgeForm" class="panel form-grid">
+        <h3 class="full">New cash pledge</h3>
+        <label class="full">Contributor *
+          <select name="personId" id="pledgePerson" required><option value="">Choose contributor</option></select>
+        </label>
+        <label>Amount (UGX) *<input name="amount" type="number" min="1" step="1" required inputmode="numeric" placeholder="200000"></label>
+        <label>Date pledged<input name="date" type="date" required></label>
+        <label class="full">Notes<input name="notes" maxlength="160" placeholder="Optional details"></label>
+        <button class="primary full" type="submit">Save pledge</button>
+      </form>
+      <div class="panel"><div class="panel-heading"><h3>Pledge register</h3></div><div id="pledgesList" class="record-list empty-state">No pledges recorded yet.</div></div>
+    </section>
+
+    <section class="view" id="view-payments">
+      <div class="section-heading"><div><p class="eyebrow">MONEY RECEIVED</p><h2>Record a payment</h2></div></div>
+      <form id="paymentForm" class="panel form-grid">
+        <h3 class="full">New payment</h3>
+        <label class="full">Pledge *
+          <select name="pledgeId" id="paymentPledge" required><option value="">Choose a pledge</option></select>
+        </label>
+        <label>Amount received (UGX) *<input name="amount" type="number" min="1" step="1" required inputmode="numeric" placeholder="50000"></label>
+        <label>Date received<input name="date" type="date" required></label>
+        <label>Payment method
+          <select name="method"><option>Cash</option><option>MTN Mobile Money</option><option>Airtel Money</option><option>Bank transfer</option><option>Other</option></select>
+        </label>
+        <label>Reference / receipt no.<input name="reference" maxlength="60" placeholder="Optional"></label>
+        <label class="full">Notes<input name="notes" maxlength="160" placeholder="Optional details"></label>
+        <button class="primary full" type="submit">Save payment</button>
+      </form>
+      <div class="panel"><div class="panel-heading"><h3>Payment history</h3></div><div id="paymentsList" class="record-list empty-state">No payments recorded yet.</div></div>
+    </section>
+
+    <section class="view" id="view-gifts">
+      <div class="section-heading"><div><p class="eyebrow">NON-CASH SUPPORT</p><h2>Other contributions</h2></div></div>
+      <form id="giftForm" class="panel form-grid">
+        <h3 class="full">Record an item or service</h3>
+        <label class="full">Contributor *
+          <select name="personId" id="giftPerson" required><option value="">Choose contributor</option></select>
+        </label>
+        <label>Contribution *
+          <input name="item" required maxlength="100" placeholder="e.g. 25kg rice, transport"></label>
+        <label>Quantity / details<input name="quantity" maxlength="70" placeholder="e.g. 2 bags, one trip"></label>
+        <label>Date received<input name="date" type="date" required></label>
+        <label>Estimated value (UGX)<input name="value" type="number" min="0" step="1" inputmode="numeric" placeholder="Optional"></label>
+        <label class="full">Notes<input name="notes" maxlength="160" placeholder="Optional details"></label>
+        <button class="primary full" type="submit">Save contribution</button>
+      </form>
+      <div class="panel"><div class="panel-heading"><h3>Other contributions register</h3></div><div id="giftsList" class="record-list empty-state">No other contributions recorded yet.</div></div>
+    </section>
+
+    <section class="view" id="view-records">
+      <div class="section-heading"><div><p class="eyebrow">FULL REGISTER</p><h2>All records</h2></div></div>
+      <div class="panel">
+        <input id="recordsSearch" class="search" placeholder="Search names, notes, methods…">
+        <div id="allRecords" class="record-list empty-state">No records yet.</div>
+      </div>
+    </section>
+
+    <section class="view" id="view-backup">
+      <div class="section-heading"><div><p class="eyebrow">DATA SAFETY</p><h2>Backup & restore</h2></div></div>
+      <div class="panel">
+        <h3>Keep a copy of your data</h3>
+        <p class="muted">Your records are stored in this browser on this phone. Export a backup regularly, especially before changing phones or clearing browser data.</p>
+        <div class="button-stack">
+          <button class="primary" id="exportJson">Download full backup (JSON)</button>
+          <button class="secondary" id="exportCsv">Export records (CSV)</button>
+          <label class="file-button">Restore from backup<input type="file" id="restoreFile" accept=".json,application/json"></label>
+        </div>
+        <p class="warning-text">Restoring a backup replaces the records currently in this app. Export your current data first if you may need it.</p>
+      </div>
+      <div class="panel">
+        <h3>Data summary</h3>
+        <div id="dataSummary" class="summary-lines"></div>
+        <button class="danger-outline" id="clearData">Delete all app data</button>
+        <p class="muted small-text">This action cannot be undone unless you have a backup.</p>
+      </div>
+      <div class="note-card"><strong>Privacy</strong><p>This app does not send your contribution records to a website or server. Anyone with access to your unlocked phone/browser may be able to view them, so protect your device and backup files.</p></div>
+    </section>
+
+    <footer>ELIAS NIKAH CONTRIBUTIONS MANAGER <span>•</span> Private local record</footer>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>

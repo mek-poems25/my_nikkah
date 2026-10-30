@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<rect width="512" height="512" rx="110" fill="#123b70"/>
+<rect x="35" y="35" width="442" height="442" rx="88" fill="none" stroke="#d4b36c" stroke-width="9"/>
+<text x="256" y="286" font-family="Georgia,serif" font-size="168" font-weight="bold" text-anchor="middle" fill="#f3d995">EN</text>
+<path d="M135 350h242" stroke="#d4b36c" stroke-width="8" stroke-linecap="round"/>
+</svg>

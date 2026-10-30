@@ -1,0 +1,18 @@
+{
+  "name": "ELIAS NIKAH CONTRIBUTIONS MANAGER",
+  "short_name": "Nikah Manager",
+  "description": "Private offline tracker for Nikah pledges and contributions.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f3f6fa",
+  "theme_color": "#123b70",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
